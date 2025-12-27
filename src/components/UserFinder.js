@@ -1,21 +1,17 @@
 import { Fragment,Component } from 'react';
+import UsersContext from '../store/users-context';
 
 import Users from './Users';
 import classes from './UserFinder.module.css';
 
-//assume that this data is fetched from a server
-const DUMMY_USERS = [
-  { id: 'u1', name: 'Max' },
-  { id: 'u2', name: 'Manuel' },
-  { id: 'u3', name: 'Julie' },
-];
 
 
 class UserFinder extends Component {
+  static contextType = UsersContext;
   constructor() {
     super();
     this.state = {
-      filteredUsers: DUMMY_USERS,
+      filteredUsers: [],
       searchTerm: '',
     };      
     }
@@ -29,14 +25,14 @@ class UserFinder extends Component {
   componentDidMount(){
     //fetch users from a server
     this.setState({
-      filteredUsers: DUMMY_USERS,
+      filteredUsers: this.context.users,
     });
   }
 
   componentDidUpdate(prevProps,prevState){
     if(prevState.searchTerm !== this.state.searchTerm){
       this.setState({
-        filteredUsers: DUMMY_USERS.filter((user) => user.name.includes(this.state.searchTerm))
+        filteredUsers: this.context.users.filter((user) => user.name.includes(this.state.searchTerm))
       });
     }
   }
